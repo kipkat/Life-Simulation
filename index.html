@@ -1,0 +1,97 @@
+<html>
+<body>
+  <center>
+    <h1 style='margin-bottom: 2px;'>Life Evolution Simulation</h1>
+    <h4 style='margin-top: 10px;' id=author></h4>
+    <script>
+    signature_hue = 0;
+    function signature()
+    {
+      document.getElementById("author").innerHTML =
+      'Created by <a style="color: hsl('+signature_hue+',100%,34%);" href="https://github.com/kipkat">kipkat</a>'
+      signature_hue += 1;
+    }
+    setInterval(signature,10)
+    </script>
+    <canvas style="display: none" height=500 width=500 id="display"></canvas>
+    <script src='main.js'></script>
+    <script>
+    function live()
+    {
+      io.innerHTML = "";
+      for(human in alive)
+      {
+        alive[human][0].move()
+        io.innerHTML+="<a style='font-size: .6cm'>"+"Life "+alive[human][0].id+": </a>"+
+        "<a>X: "+Math.floor(alive[human][0].pX)+", </a>"+
+        "<a>Y: "+Math.floor(alive[human][0].pY)+", </a>"+
+        "<a>Mental age: "+Math.floor(alive[human][0].age)+", </a>"+
+        "<a>Intelligence: "+Math.floor(alive[human][0].intelligence)+"exppf, </a>"+
+        "<a>Brain power: "+alive[human][0].brain.length+", </a>"+
+        "<a>Drank water: "+parseInt(alive[human][0].drankWater)+", </a>"+
+        "<a>Male: "+(alive[human][0].male==1)+"</a><br>"
+      }
+    }
+    function startSimulation()
+    {
+      dTerrain(size)
+      dWater(size)
+      adam = new life(1,canvas.width/size/2,canvas.width/size/2)
+      eve = new life(0,canvas.width/size/2,canvas.width/size/2)
+      simInt = setInterval(live, speed)
+    }
+    function pauses()
+    {
+      clearInterval(simInt)
+      controls.children[0].style.display = 'none'
+      controls.children[1].style.display = 'block'
+    }
+    function resumes()
+    {
+      simInt = setInterval(live, speed)
+      controls.children[0].style.display = 'block'
+      controls.children[1].style.display = 'none'
+    }
+    function setio()
+    {
+      size = io_size.value
+      rule = eval(io_rule.value)
+      born = io_born.value;
+      death = io_death.value;
+      trees = io_trees.value;
+      water = io_water.value;
+      houses = io_houses.value;
+      creations = io_creations.value;
+      waterSize = io_waterSize.value;
+      minimump = io_minimump.value;
+      maximump = io_maximump.value;
+      speed = io_speed.value;
+      display.style.display = 'block';
+      controls.style.display = 'block';
+      io.innerHTML=''
+      startSimulation()
+    }
+    </script>
+    <div id='controls' style='display: none;'>
+      <input type=button style='display:block' value="Pause simulation" onclick="pauses()">
+      <input type=button style='display:none' value="Resume simulation" onclick="resumes()">
+      <input type=button value="Restart simulation" onclick="location.reload()">
+    </div>
+    <div id='io'>
+      <a>Size </a><input id=io_size value=3></a><br/>
+      <a>Rule </a><input id=io_rule value="Math.random"></a><br/>
+      <a>Procreation rarity </a><input id=io_born value=2000></a><br/>
+      <a>Death rarity </a><input id=io_death value=2000></a><br/>
+      <a>Trees rarity </a><input id=io_trees value=60></a><br/>
+      <a>Water rarity </a><input id=io_water value=200></a><br/>
+      <a>Houses rarity </a><input id=io_houses value=200></a><br/>
+      <a>Creation rarity </a><input id=io_creations value=975></a><br/>
+      <a>Maximum water size </a><input id=io_waterSize value=20></a><br/>
+      <a>Minimum population </a><input id=io_minimump value=2></a><br/>
+      <a>Maximum population </a><input id=io_maximump value=50></a><br/>
+      <a>Speed </a><input id=io_speed value=1></a><br/>
+      <input type=button value="Start simulation" onclick="setio()">
+    </div>
+  </center>
+</body>
+</html>
